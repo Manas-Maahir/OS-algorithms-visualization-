@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OS Visualizer — CPU Scheduling (Multiple Algorithms)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>OS Visualizer — CPU Scheduling</h1>
+      <div class="top-controls">
+        <label>Algorithm
+          <select id="algorithm">
+            <option value="RR">Round Robin (RR)</option>
+            <option value="FCFS">FCFS</option>
+            <option value="SJF">SJF (Non-preemptive)</option>
+            <option value="PRIORITY">Priority (Non-preemptive)</option>
+            <option value="MLQ">Multilevel Queue (Foreground RR / Background FCFS)</option>
+          </select>
+        </label>
+
+        <label>Animation Speed
+          <input id="speed" type="range" min="0.25" max="2" step="0.05" value="1" />
+        </label>
+
+        <label id="quantum-label">Time Quantum
+          <input id="quantum" type="number" min="1" value="4" />
+        </label>
+
+        <label id="mlq-opts" style="display:none">
+          FG Quantum
+          <input id="mlq-fg-quantum" type="number" min="1" value="2" style="width:60px" />
+          BG Quantum
+          <input id="mlq-bg-quantum" type="number" min="1" value="4" style="width:60px" disabled />
+        </label>
+
+        <button id="load-sample">Load Sample</button>
+        <button id="run-sim">Simulate</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="left">
+        <div class="process-input">
+          <h2>Processes</h2>
+          <table id="proc-table">
+            <thead><tr><th>#</th><th>PID</th><th>Arrival</th><th>Burst</th><th>Priority</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <div class="proc-controls">
+            <button id="add-proc">Add Process</button>
+            <button id="clear-procs">Clear</button>
+          </div>
+        </div>
+
+        <div class="controls">
+          <h3>Playback</h3>
+          <div class="playback">
+            <button id="rewind">⏮️</button>
+            <button id="step-back">◀️</button>
+            <button id="play">▶️</button>
+            <button id="pause">⏸️</button>
+            <button id="step-forward">▶️▶️</button>
+            <button id="fastfwd">⏭️</button>
+          </div>
+          <input id="timeline" type="range" min="0" max="0" step="1" value="0" />
+          <div class="export">
+            <button id="export-screenshot">Export Screenshot</button>
+            <button id="export-trace">Download Trace</button>
+          </div>
+        </div>
+
+        <div class="stats">
+          <h3>Real-time Statistics</h3>
+          <div id="stats-content">
+            <p>Makespan: <span id="stat-ct">-</span></p>
+            <p>Avg Waiting Time: <span id="stat-wt">-</span></p>
+            <p>Avg Turnaround Time: <span id="stat-tt">-</span></p>
+            <p>Throughput: <span id="stat-th">-</span> proc/unit</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="right">
+        <canvas id="vis-canvas" width="1000" height="480"></canvas>
+        <div class="legend">
+          <span class="legend-item"><span class="color cpu"></span> CPU</span>
+          <span class="legend-item"><span class="color ready"></span> Ready Queue</span>
+          <span class="legend-item"><span class="color finished"></span> Finished</span>
+        </div>
+        <div class="gantt-container">
+        <h3>Gantt Chart</h3>
+        <canvas id="gantt-canvas" width="1000" height="160"></canvas>
+        </div>
+        <div class="trace">
+          <h3>Execution Trace</h3>
+          <pre id="trace-output">No trace yet. Click "Simulate".</pre>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <small>Standalone client-side demo — multiple scheduling algorithms. No server required.</small>
+    </footer>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
